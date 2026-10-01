@@ -1,0 +1,253 @@
+/* Design tokens, verbatim from the RepoVue design brief.
+   Light and dark are both first-class; density shrinks table rows only. */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  --paper: #ffffff;
+  --sunk: #f5f5f3;
+  --rule: #dcdcd8;
+  --rule-2: #ececea;
+  --ink: #000000;
+  --ink-2: #4a4a48;
+  --ink-3: #6b6b66;
+  --accent: #1a3ea8;
+  --accent-soft: #eef1fa;
+  --sev5-bg: #000000;
+  --sev5-fg: #ffffff;
+  --sev4-bg: #1a3ea8;
+  --sev4-fg: #ffffff;
+  --sev3-bg: #c7d2ee;
+  --sev3-fg: #10224f;
+  --sev2-bg: #e8ecf6;
+  --sev2-fg: #2b3350;
+  --sev1-bg: transparent;
+  --sev1-fg: #6b6b66;
+  --add-bg: #e9f5ec;
+  --add-fg: #0b5a2a;
+  --del-bg: #fcebe9;
+  --del-fg: #8a1c13;
+  --pass: #0e7c3a;
+  --fail: #b42318;
+  --warn: #8a5a00;
+  --row-pad: 11px;
+  --sel: #eef1fa;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body[data-theme="dark"] {
+  --paper: #000000;
+  --sunk: #121214;
+  --rule: #2c2c2e;
+  --rule-2: #1c1c1e;
+  --ink: #ededea;
+  --ink-2: #a8a8a2;
+  --ink-3: #86867f;
+  --accent: #7a9bff;
+  --accent-soft: #0e1730;
+  --sev5-bg: #ffffff;
+  --sev5-fg: #000000;
+  --sev4-bg: #7a9bff;
+  --sev4-fg: #00081f;
+  --sev3-bg: #2e3f73;
+  --sev3-fg: #dbe4ff;
+  --sev2-bg: #1a1f30;
+  --sev2-fg: #aeb8d2;
+  --sev1-bg: transparent;
+  --sev1-fg: #86867f;
+  --add-bg: #0c2a18;
+  --add-fg: #79dc9d;
+  --del-bg: #2d1210;
+  --del-fg: #ff9e93;
+  --pass: #4ed07e;
+  --fail: #ff6b5e;
+  --warn: #e0aa4a;
+  --accent-soft: #101a36;
+  --sel: #101a36;
+}
+
+body[data-density="compact"] {
+  --row-pad: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: var(--ink);
+}
+
+::placeholder {
+  color: var(--ink-3);
+}
+
+/* ---- shared primitives --------------------------------------------- */
+
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.btn {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--sunk);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.86;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-quiet {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ink-3);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-quiet:hover {
+  color: var(--ink);
+}
+
+.field {
+  width: 100%;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 14px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+}
+
+.field:focus {
+  border-bottom-color: var(--ink);
+  outline: none;
+}
+
+.field-boxed {
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.field-boxed:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.row-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--rule-2);
+  background: transparent;
+  cursor: pointer;
+}
+
+.row-link:hover {
+  background: var(--sunk);
+}
+
+.sweep {
+  animation: rv-sweep 1.1s linear infinite;
+}
+
+@keyframes rv-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* The sidebar collapses to a strip above the content on narrow screens. */
+@media (max-width: 860px) {
+  .rv-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .rv-nav {
+    position: static !important;
+    height: auto !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--rule);
+  }
+  .rv-pad {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .rv-split {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}

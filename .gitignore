@@ -1,0 +1,26 @@
+# Environment & secrets
+.env
+*.env
+*.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+repovue-workspace/
+
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
