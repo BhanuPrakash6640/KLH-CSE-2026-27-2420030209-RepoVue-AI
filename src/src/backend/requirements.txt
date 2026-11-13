@@ -1,0 +1,40 @@
+# ---- Web / API ----
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.0
+python-multipart==0.0.20
+
+# ---- Database ----
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+pgvector==0.3.6
+alembic==1.14.0
+greenlet==3.1.1
+
+# ---- HTTP / integrations ----
+httpx==0.28.1
+tenacity==9.0.0
+
+# ---- Code analysis ----
+tree-sitter==0.23.2
+tree-sitter-language-pack==0.7.2
+networkx==3.4.2
+
+# ---- AI ----
+anthropic==0.42.0
+scikit-learn>=1.4.0
+xgboost>=2.0.0
+
+# ---- Sandbox validation ----
+docker==7.1.0
+
+# ---- Utils ----
+structlog==24.4.0
+python-dotenv==1.0.1
+orjson==3.10.13
+
+# ---- Dev / test ----
+pytest==8.3.4
+pytest-asyncio==0.25.0
+ruff==0.8.4

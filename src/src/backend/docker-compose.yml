@@ -1,0 +1,48 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: repovue
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/repovue
+      DB_SSL: "false"
+      RUN_WORKER_IN_API: "false"
+    ports: ["8000:8000"]
+    depends_on:
+      db: {condition: service_healthy}
+
+  # Separate worker so a long Docker validation never blocks API requests.
+  worker:
+    build: .
+    command: ["python", "-m", "app.worker.tasks"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/repovue
+      DB_SSL: "false"
+    depends_on:
+      db: {condition: service_healthy}
+    # Required for the sandbox stage: the worker builds and runs containers.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # nginx serves the built client and proxies /api to the API on the same
+  # origin, so the browser never makes a cross-origin request.
+  web:
+    build: ../frontend
+    ports: ["3000:80"]
+    depends_on: [api]
+
+volumes:
+  pgdata:

@@ -1,0 +1,301 @@
+/* Design tokens, verbatim from the RepoVue design brief.
+   Light and dark are both first-class; density shrinks table rows only. */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  --paper: #ffffff;
+  --paper-2: #f8fafc;
+  --bg-secondary: #f8fafc;
+  --sunk: #f8fafc;
+  --sidebar-bg: #f1f5f9;
+  --rule: #e2e8f0;
+  --rule-2: #e2e8f0;
+  --ink: #0f172a;
+  --ink-2: #475569;
+  --ink-3: #64748b;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #eff6ff;
+  --sel: #dbeafe;
+  --nav-active-bg: #dbeafe;
+  --nav-active-fg: #1d4ed8;
+  --btn-primary-bg: #2563eb;
+  --btn-primary-border: #2563eb;
+  --btn-primary-hover: #1d4ed8;
+  --btn-primary-fg: #ffffff;
+  --sev5-bg: #dc2626;
+  --sev5-fg: #ffffff;
+  --sev4-bg: #ea580c;
+  --sev4-fg: #ffffff;
+  --sev3-bg: #fef3c7;
+  --sev3-fg: #92400e;
+  --sev2-bg: #eff6ff;
+  --sev2-fg: #1d4ed8;
+  --sev1-bg: transparent;
+  --sev1-fg: #2563eb;
+  --add-bg: #f0fdf4;
+  --add-fg: #15803d;
+  --del-bg: #fef2f2;
+  --del-fg: #b91c1c;
+  --pass: #16a34a;
+  --fail: #dc2626;
+  --warn: #d97706;
+  --row-pad: 11px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body[data-theme="dark"] {
+  --paper: #0f172a;
+  --paper-2: #1e293b;
+  --bg-secondary: #1e293b;
+  --sunk: #1e293b;
+  --sidebar-bg: #111827;
+  --rule: #334155;
+  --rule-2: #334155;
+  --ink: #f8fafc;
+  --ink-2: #cbd5e1;
+  --ink-3: #94a3b8;
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-soft: #1e3a5f;
+  --sel: #1e3a5f;
+  --nav-active-bg: #1e3a5f;
+  --nav-active-fg: #93c5fd;
+  --btn-primary-bg: #60a5fa;
+  --btn-primary-border: #60a5fa;
+  --btn-primary-hover: #93c5fd;
+  --btn-primary-fg: #0f172a;
+  --sev5-bg: #ef4444;
+  --sev5-fg: #ffffff;
+  --sev4-bg: #fb923c;
+  --sev4-fg: #0f172a;
+  --sev3-bg: #78350f;
+  --sev3-fg: #fde68a;
+  --sev2-bg: #1e3a5f;
+  --sev2-fg: #93c5fd;
+  --sev1-bg: transparent;
+  --sev1-fg: #60a5fa;
+  --add-bg: #064e3b;
+  --add-fg: #86efac;
+  --del-bg: #450a0a;
+  --del-fg: #fca5a5;
+  --pass: #4ade80;
+  --fail: #f87171;
+  --warn: #fbbf24;
+}
+
+body[data-density="compact"] {
+  --row-pad: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--sel);
+  color: var(--ink);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: var(--ink);
+}
+
+::placeholder {
+  color: var(--ink-3);
+}
+
+/* ---- sidebar and active navigation --------------------------------- */
+
+.rv-nav {
+  background: var(--sidebar-bg) !important;
+}
+
+.rv-nav a.active {
+  background: var(--nav-active-bg) !important;
+  color: var(--nav-active-fg) !important;
+}
+
+.rv-nav a.active span {
+  color: var(--nav-active-fg) !important;
+}
+
+.rv-nav a:hover:not(.active) {
+  background: var(--sunk) !important;
+  color: var(--ink) !important;
+}
+
+/* ---- shared primitives --------------------------------------------- */
+
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.btn {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--sunk);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  border: 1px solid var(--btn-primary-border);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--btn-primary-hover);
+  border-color: var(--btn-primary-hover);
+  opacity: 0.95;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-quiet {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ink-3);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-quiet:hover {
+  color: var(--accent);
+}
+
+.field {
+  width: 100%;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 14px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+}
+
+.field:focus {
+  border-bottom-color: var(--accent);
+  outline: none;
+}
+
+.field-boxed {
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.field-boxed:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.row-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--rule-2);
+  background: transparent;
+  cursor: pointer;
+}
+
+.row-link:hover {
+  background: var(--sunk);
+}
+
+.sweep {
+  animation: rv-sweep 1.1s linear infinite;
+  background: var(--accent) !important;
+}
+
+@keyframes rv-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* The sidebar collapses to a strip above the content on narrow screens. */
+@media (max-width: 860px) {
+  .rv-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .rv-nav {
+    position: static !important;
+    height: auto !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--rule);
+  }
+  .rv-pad {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .rv-split {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
