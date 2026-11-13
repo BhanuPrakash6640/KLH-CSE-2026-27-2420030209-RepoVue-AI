@@ -1,0 +1,63 @@
+name: RepoVue analysis
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger RepoVue analysis
+        id: start
+        run: |
+          PAYLOAD=$(jq -n \
+            --arg url "https://github.com/${{ github.repository }}" \
+            --arg sha "${{ github.event.pull_request.head.sha || github.sha }}" \
+            --arg branch "${{ github.head_ref || github.ref_name }}" \
+            --argjson pr "${{ github.event.pull_request.number || 'null' }}" \
+            '{url:$url, commit_sha:$sha, branch:$branch, pr_number:$pr, diff_only:true, open_pr:false}')
+
+          ID=$(curl -sS -X POST "$REPOVUE_URL/api/v1/analyses" \
+            -H "X-API-Key: $REPOVUE_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" | jq -r .id)
+
+          echo "analysis_id=$ID" >> "$GITHUB_OUTPUT"
+          echo "Analysis $ID queued"
+        env:
+          REPOVUE_URL: ${{ secrets.REPOVUE_URL }}
+          REPOVUE_API_KEY: ${{ secrets.REPOVUE_API_KEY }}
+
+      - name: Wait for results and enforce the quality gate
+        run: |
+          ID="${{ steps.start.outputs.analysis_id }}"
+          for i in $(seq 1 120); do
+            GATE=$(curl -sS "$REPOVUE_URL/api/v1/analyses/$ID/gate?fail_on=high" \
+              -H "X-API-Key: $REPOVUE_API_KEY")
+            COMPLETE=$(echo "$GATE" | jq -r .complete)
+            echo "[$i] stage=$(echo "$GATE" | jq -r .stage) progress=$(echo "$GATE" | jq -r .progress)"
+            if [ "$COMPLETE" = "true" ]; then
+              echo "$GATE" | jq .
+              echo "### RepoVue" >> $GITHUB_STEP_SUMMARY
+              echo "$GATE" | jq -r '.counts | to_entries[] | "- \(.value) \(.key)"' >> $GITHUB_STEP_SUMMARY
+              if [ "$(echo "$GATE" | jq -r .passed)" != "true" ]; then
+                echo "Quality gate failed: $(echo "$GATE" | jq -r .blocking_findings) blocking findings"
+                exit 1
+              fi
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Timed out waiting for RepoVue"; exit 1
+        env:
+          REPOVUE_URL: ${{ secrets.REPOVUE_URL }}
+          REPOVUE_API_KEY: ${{ secrets.REPOVUE_API_KEY }}
